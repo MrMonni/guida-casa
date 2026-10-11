@@ -1,5 +1,7 @@
 # Guida degli elettrodomestici
 
+**Link da condividere:** https://mrmonni.github.io/guida-casa/
+
 Guida semplice per l'uso degli elettrodomestici di casa (microonde IKEA GÅTEBO, forno IKEA SPJUTBO,
 piano cottura IKEA VILSTA, lavatrice Electroline), basata solo sui manuali d'uso.
 
