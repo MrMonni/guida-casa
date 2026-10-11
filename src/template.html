@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1f3b57">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Casa">
+<title>Guida di casa</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{
+  --bg:#f6f3ee; --card:#ffffff; --ink:#1b1b1b; --muted:#4a4a4a; --line:#d9d3c7;
+  --accent:#1f3b57; --accent-ink:#ffffff; --warn-bg:#fff1d6; --warn-line:#e0a526; --note-bg:#eef4fb;
+  --ok:#2f7d55; --focus:#ffbf47; --fs:21px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181c; --card:#20252b; --ink:#f2f2f2; --muted:#c9c9c9; --line:#3a424b;
+    --accent:#8fb8e3; --accent-ink:#0f1c29; --warn-bg:#3b3020; --warn-line:#e0a526; --note-bg:#1d2a38;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181c; --card:#20252b; --ink:#f2f2f2; --muted:#c9c9c9; --line:#3a424b;
+  --accent:#8fb8e3; --accent-ink:#0f1c29; --warn-bg:#3b3020; --warn-line:#e0a526; --note-bg:#1d2a38;
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+header.top{background:var(--accent);color:var(--accent-ink)}
+header.top .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:14px;padding-bottom:14px}
+header.top h1{font-size:1.25rem;margin:0;flex:1;min-width:10em;cursor:pointer}
+.sizer{display:flex;gap:6px}
+.sizer button{background:transparent;border:2px solid currentColor;color:inherit;border-radius:10px;min-width:52px;min-height:48px;font-weight:700;cursor:pointer}
+.sizer button[aria-pressed="true"]{background:var(--accent-ink);color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:10px 22px;border-radius:14px;border:2px solid var(--accent);background:var(--card);color:var(--ink);font-weight:700;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.big{min-height:72px;font-size:1.1rem;flex:1}
+.back{margin:4px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:16px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;min-height:200px;padding:18px;background:var(--card);border:3px solid var(--line);border-radius:22px;cursor:pointer;font-size:1.3rem;font-weight:800;color:var(--ink)}
+.tile:hover{border-color:var(--accent)}
+.tile .ic{width:96px;height:96px}
+.ic.hdr{width:72px;height:72px;flex:none}
+.tile small{font-size:.75rem;font-weight:500;color:var(--muted)}
+.search{display:flex;gap:10px;margin:18px 0 8px}
+.search input{flex:1;min-width:0;min-height:62px;border-radius:14px;border:3px solid var(--line);background:var(--card);padding:0 16px}
+.search input:focus{border-color:var(--accent)}
+h2{font-size:1.45rem;margin:10px 0 6px}
+h3{font-size:1.15rem;margin:22px 0 10px}
+.sub{color:var(--muted);margin:0 0 14px}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin:14px 0 18px}
+.tabs button{min-height:64px;border-radius:14px;border:3px solid var(--line);background:var(--card);font-weight:800;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;gap:16px;width:100%;text-align:left;min-height:76px;padding:12px 16px;background:var(--card);border:2px solid var(--line);border-radius:16px;cursor:pointer;font-weight:700}
+.item:hover{border-color:var(--accent)}
+.item .ic{width:56px;height:56px;flex:none}
+.item .arrow{margin-left:auto;font-size:1.4rem;color:var(--muted)}
+.ic{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:12px;border:1px solid #ddd;padding:6px;color:#111;overflow:hidden}
+.ic img{max-width:100%;max-height:100%;display:block}
+.ic svg{width:100%;height:100%;display:block}
+.disp{display:inline-flex;align-items:center;justify-content:center;background:#111;color:#ff5a3c;font-family:"Courier New",monospace;font-weight:900;border-radius:8px;min-width:1.6em;padding:0 .2em;letter-spacing:.05em}
+.keycap{display:inline-flex;align-items:center;justify-content:center;border:2.5px solid #222;border-radius:10px;padding:4px 8px;font-weight:800;color:#111;text-align:center;line-height:1.1;font-size:.8em}
+.card{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:18px}
+.step{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding:24px 18px}
+.step .ic{width:170px;height:170px;padding:14px}
+.step .count{font-weight:800;color:var(--muted);font-size:.9rem;letter-spacing:.04em}
+.step .t{font-size:1.4rem;font-weight:800;margin:0}
+.step .d{font-size:1.05rem;color:var(--muted);margin:0;max-width:34em}
+.dots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.dots span{width:16px;height:16px;border-radius:50%;background:var(--line)}
+.dots span.on{background:var(--accent)}
+.nav{display:flex;gap:12px;margin-top:16px}
+.warn{background:var(--warn-bg);border-left:8px solid var(--warn-line);border-radius:12px;padding:14px 16px;margin:14px 0;font-weight:600}
+.note{background:var(--note-bg);border-radius:12px;padding:14px 16px;margin:14px 0}
+.src{display:inline-block;font-size:.8rem;color:var(--muted);margin-top:8px}
+.speak{background:transparent;border:2px solid var(--line);border-radius:12px;min-height:52px;padding:6px 14px;cursor:pointer;font-weight:700}
+details.faq{background:var(--card);border:2px solid var(--line);border-radius:16px;margin-bottom:10px}
+details.faq summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:800;min-height:64px;display:flex;align-items:center;gap:12px}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::before{content:"?";flex:none;width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-weight:900}
+details.faq[open] summary{border-bottom:2px solid var(--line)}
+details.faq .ans{padding:14px 18px 16px}
+.tablewrap{overflow-x:auto;border:2px solid var(--line);border-radius:14px;background:var(--card);margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--note-bg)}
+tr:last-child td{border-bottom:0}
+.prob{display:flex;gap:16px;align-items:flex-start}
+.prob .code{flex:none;width:84px;display:flex;justify-content:center;font-size:1.3rem}
+.prob .code .ic{width:80px;height:80px}
+.prob>div{flex:1;min-width:0}
+.ic .keycap{font-size:12px;padding:4px 5px;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.step .ic .keycap{font-size:1.15rem;padding:8px 12px}
+.tile .ic .keycap{font-size:16px}
+.ic .disp{font-size:24px;line-height:1.25;min-width:1.3em}
+.ic .disp.n{font-size:18px}
+.step .ic .disp{font-size:68px}
+.step .ic .disp.n{font-size:46px}
+.ic.kc{width:auto!important;min-width:56px;max-width:150px}
+.ic.kc .keycap{font-size:12px;padding:4px 6px}
+.step .ic.kc{max-width:90%;min-width:170px}
+.step .ic.kc .keycap{font-size:26px;padding:10px 16px}
+.mock{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;font-size:12px;color:#111;font-weight:800;padding:4px;border-radius:8px;max-width:100%}
+.mock b{display:block}
+.mock.grid4{display:grid;grid-template-columns:1fr 1fr;gap:5px;width:100%}
+.mock.grid4 b{border:2px solid #bbb;border-radius:8px;padding:10px 2px;text-align:center}
+.mock.rows{flex-direction:column;align-items:stretch;width:100%}
+.mock.rows b{border:2px solid #bbb;border-radius:8px;padding:6px 8px}
+.mock.dark{background:#1f3b57;color:#fff;padding:10px}
+.mbtn{border:2px solid #1f3b57;border-radius:8px;padding:6px 8px;background:#fff;white-space:nowrap}
+.mbtn.pri{background:#1f3b57;color:#fff}
+.mbtn.inv{background:transparent;color:#fff;border-color:#fff}
+.mbtn.lk{color:#111}
+.step .ic .mock{font-size:18px}
+.ic.wide{width:auto!important;min-width:56px}
+.step .ic.uiw{width:92%;max-width:440px;height:auto;min-height:130px;padding:14px}
+.prob.stack{flex-direction:column}
+.prob.stack .code{width:100%;justify-content:flex-start}
+.prob.stack .code .ic.uiw{width:100%;max-width:360px;height:auto;min-height:80px}
+.no-flexgap .prob.stack>*+*{margin-left:0;margin-top:12px}
+.welcome{display:flex;align-items:center;gap:16px;width:100%;text-align:left;padding:16px 18px;margin-bottom:18px;border-radius:20px;border:3px solid var(--warn-line);background:var(--warn-bg);color:var(--ink);font-weight:800;font-size:1.15rem;cursor:pointer}
+.welcome .ic{width:72px;height:72px;flex:none}
+.welcome small{display:block;font-weight:500;font-size:.85rem;color:var(--muted)}
+.grouph{margin:24px 0 10px;font-size:1.05rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.step .links{justify-content:center}
+.lnk{min-height:54px;padding:8px 16px;border-radius:12px;border:2px solid var(--accent);background:transparent;color:var(--ink);font-weight:700;cursor:pointer;text-align:left}
+.lnk::before{content:"→ ";color:var(--accent);font-weight:900}
+.returnbar{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
+.flash{animation:flash 2s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 6px var(--focus)}100%{box-shadow:0 0 0 0 transparent}}
+.panelimg{background:#fff;border-radius:14px;padding:10px;border:2px solid var(--line);text-align:center}
+.panelimg img{max-width:100%;height:auto}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px;margin-top:14px}
+.legend div{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:8px 12px}
+.legend .ic{width:58px;height:58px;flex:none}
+.contact{display:flex;flex-direction:column;gap:6px}
+.contact a{font-size:1.3rem;font-weight:800;color:var(--accent)}
+footer{color:var(--muted);font-size:.85rem;padding:24px 0 40px}
+.hl{background:var(--warn-bg)}
+@media (max-width:520px){
+  .step .ic{width:130px;height:130px}
+  .step .t{font-size:1.2rem}
+  .nav{flex-direction:column-reverse}
+}
+.fig{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px}
+.fig h3{margin:0 0 10px}
+.fig .imgbox{background:#fff;border-radius:12px;padding:8px;text-align:center;cursor:zoom-in;position:relative}
+.fig .imgbox img{max-width:100%;height:auto;max-height:520px}
+.fig .zoomhint{display:block;font-size:.8rem;color:#555;margin-top:4px}
+.fig ol{list-style:none;padding:0;margin:12px 0 0;columns:2 16em}
+.fig li{padding:6px 0;break-inside:avoid;font-weight:600}
+.stepfig{margin-top:14px}
+#zoom{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:50;display:none;overflow:auto;-webkit-overflow-scrolling:touch;padding:70px 10px 20px;text-align:center}
+#zoom.on{display:block}
+#zoom img{max-width:100%;background:#fff;border-radius:10px}
+#zoom button{position:fixed;top:12px;right:12px;min-height:56px;padding:0 22px;border-radius:14px;border:0;background:#fff;color:#111;font-weight:800;font-size:1.1rem}
+/* iPad/Safari più vecchi (prima di iOS 14.5) non conoscono "gap" nei flex */
+.no-flexgap .item>*+*,.no-flexgap .legend div>*+*,.no-flexgap .prob>*+*,.no-flexgap .search>*+*,.no-flexgap .sizer>*+*{margin-left:12px}
+.no-flexgap .nav>*+*{margin-left:12px}
+.no-flexgap .list>*+*{margin-top:10px}
+.no-flexgap .links>*{margin:0 10px 10px 0}
+.no-flexgap .step>*+*{margin-top:16px}
+.no-flexgap .tile>*+*{margin-top:12px}
+.no-flexgap .welcome>*+*{margin-left:16px}
+.no-flexgap .mock>*+*{margin-left:6px}
+.no-flexgap header.top .wrap>*+*{margin-left:12px}
+@media (max-width:520px){.no-flexgap .nav>*+*{margin-left:0;margin-bottom:12px}}
+@media print{header.top,.tabs,.nav,.speak,.sizer,.back{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1 id="home-link" role="link" tabindex="0">🏠 Guida degli elettrodomestici</h1>
+    <div class="sizer" role="group" aria-label="Grandezza del testo">
+      <button data-fs="21" aria-label="Testo normale">A</button>
+      <button data-fs="25" aria-label="Testo grande">A+</button>
+      <button data-fs="29" aria-label="Testo molto grande">A++</button>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="app" tabindex="-1"><p style="font-size:1.2rem">Caricamento… Se questo messaggio resta, il browser del tablet è troppo vecchio: chiedete aiuto in famiglia.</p></main>
+<div id="zoom" role="dialog" aria-label="Immagine ingrandita"><button type="button">✕ Chiudi</button><img alt=""></div>
+<script>
+/*__IMAGES__*/
+/*__DATA__*/
+</script>
+<script>
+// Numero di famiglia da mostrare nella pagina "Aiuto" (lasciare vuoto per nasconderlo)
+const FAMIGLIA = { nome: "", tel: "" };
+// In futuro: indirizzo di un servizio che risponde a domande libere (vuoto = disattivato)
+const AI_ENDPOINT = "";
+const VERSIONE = "__VERSIONE__";
+
+(function(){ var d=document.createElement("div"); d.style.display="flex"; d.style.flexDirection="column"; d.style.rowGap="1px"; d.appendChild(document.createElement("div")); d.appendChild(document.createElement("div")); document.body.appendChild(d); var ok=d.scrollHeight===1; d.parentNode.removeChild(d); if(!ok) document.documentElement.className+=" no-flexgap"; })();
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const byId = id => id === "come" ? COME_SI_USA : APPS.find(a => a.id === id);
+const txt = s => esc(s).replace(/\n/g, "<br>");
+
+/* ---------- icone ---------- */
+const SVG = {
+  keys:`<svg viewBox="0 0 60 70" fill="none" stroke="#111" stroke-width="2.5">${[0,1,2,3].map(r=>[0,1,2].map(c=>`<rect x="${4+c*19}" y="${3+r*17}" width="15" height="13" rx="3"/><text x="${11.5+c*19}" y="${13.5+r*17}" font-size="9" text-anchor="middle" fill="#111" stroke="none" font-family="Arial" font-weight="700">${r<3? r*3+c+1 : (c==1?0:"")}</text>`).join("")).join("")}</svg>`,
+  key8:`<svg viewBox="0 0 60 60"><rect x="8" y="8" width="44" height="44" rx="8" fill="none" stroke="#111" stroke-width="3"/><text x="30" y="40" font-size="28" text-anchor="middle" font-family="Arial" font-weight="800">8</text><text x="30" y="58" font-size="7" text-anchor="middle" font-family="Arial">3 secondi</text></svg>`,
+  bell:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round"><path d="M16 42V28a14 14 0 0 1 28 0v14l4 5H12z"/><path d="M25 51a5 5 0 0 0 10 0"/><path d="M30 10v4"/></svg>`,
+  hand:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 30V12a4 4 0 0 1 8 0v16"/><path d="M32 26a4 4 0 0 1 8 0v4"/><path d="M40 30a4 4 0 0 1 8 0v10c0 9-6 15-14 15h-4c-6 0-9-3-12-8l-6-10a4 4 0 0 1 7-4l3 5"/></svg>`,
+  hob:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><rect x="4" y="6" width="52" height="48" rx="5"/><circle cx="19" cy="34" r="10"/><circle cx="41" cy="20" r="8"/><circle cx="18" cy="17" r="6"/><circle cx="42" cy="38" r="6"/></svg>`,
+  hob_on:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round"><circle cx="30" cy="32" r="18"/><path d="M30 6v20"/></svg>`,
+  hob_lock:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round"><rect x="10" y="12" width="40" height="36" rx="12"/><path d="M20 24h20M30 24v14" stroke-linecap="round"/></svg>`,
+  hob_zone:`<svg viewBox="0 0 60 60"><rect x="10" y="10" width="40" height="40" rx="4" fill="none" stroke="#111" stroke-width="3.5"/><rect x="18" y="20" width="16" height="12" fill="#111"/></svg>`,
+  plus:`<svg viewBox="0 0 60 60" stroke="#111" stroke-width="5" stroke-linecap="round"><path d="M30 10v40M10 30h40"/></svg>`,
+  minus:`<svg viewBox="0 0 60 60" stroke="#111" stroke-width="5" stroke-linecap="round"><path d="M10 30h40"/></svg>`,
+  plusminus:`<svg viewBox="0 0 60 60" stroke="#111" stroke-width="4" stroke-linecap="round" fill="none"><path d="M8 30h16M16 22v16M36 30h16"/><path d="M14 48c6 6 26 6 32 0" stroke-width="2.5"/></svg>`,
+  pot:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round"><path d="M12 22h36v20a8 8 0 0 1-8 8H20a8 8 0 0 1-8-8z"/><path d="M6 24h6M48 24h6M24 16h12"/><ellipse cx="30" cy="56" rx="22" ry="2.5" stroke-dasharray="3 3"/></svg>`,
+  wait:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round"><circle cx="30" cy="32" r="20"/><path d="M30 20v12l8 6M24 6h12"/></svg>`,
+  knob:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5"><circle cx="30" cy="30" r="20"/><path d="M30 12v14" stroke-linecap="round"/><path d="M50 14a26 26 0 0 1 4 12" stroke-width="2.5"/><path d="M54 26l-3-5M54 26l2-6" stroke-width="2.5"/></svg>`,
+  knoboff:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5"><circle cx="30" cy="34" r="18"/><path d="M30 18v14" stroke-linecap="round"/><text x="30" y="11" font-size="11" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="800">0</text></svg>`,
+  knobclock:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><circle cx="30" cy="34" r="16"/><path d="M30 20v12" stroke-linecap="round"/><circle cx="30" cy="8" r="5" stroke-width="2"/><path d="M30 5v3h2" stroke-width="1.6"/><text x="51" y="20" font-size="9" stroke="none" fill="#111" font-family="Arial">10</text><text x="4" y="30" font-size="9" stroke="none" fill="#111" font-family="Arial">100</text></svg>`,
+  knobtemp:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><circle cx="30" cy="34" r="16"/><path d="M30 20v12" stroke-linecap="round"/><text x="30" y="11" font-size="10" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="800">°C</text><text x="48" y="24" font-size="8" stroke="none" fill="#111" font-family="Arial">50</text><text x="2" y="38" font-size="8" stroke="none" fill="#111" font-family="Arial">280</text></svg>`,
+  lamp:`<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="12" fill="#e8742a"/><g stroke="#e8742a" stroke-width="3" stroke-linecap="round"><path d="M30 6v6M30 48v6M6 30h6M48 30h6M13 13l4 4M43 43l4 4M47 13l-4 4M13 47l4-4"/></g></svg>`,
+  warn:`<svg viewBox="0 0 60 60"><path d="M30 6 56 52H4z" fill="#ffd34d" stroke="#111" stroke-width="3" stroke-linejoin="round"/><path d="M30 22v14" stroke="#111" stroke-width="5" stroke-linecap="round"/><circle cx="30" cy="44" r="3" fill="#111"/></svg>`,
+  shelf:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><rect x="6" y="6" width="48" height="48" rx="5"/><g stroke-width="2"><path d="M10 16h4M10 24h4M10 32h4M10 40h4M10 48h4M46 16h4M46 24h4M46 32h4M46 40h4M46 48h4"/></g><path d="M14 32h32" stroke-width="4"/><text x="30" y="52" font-size="8" text-anchor="middle" stroke="none" fill="#111" font-family="Arial">1 = in basso</text></svg>`,
+  door:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><rect x="8" y="6" width="44" height="48" rx="5"/><circle cx="30" cy="32" r="14"/><path d="M14 12h10"/></svg>`,
+  lock:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5"><rect x="14" y="26" width="32" height="26" rx="5"/><path d="M20 26v-6a10 10 0 0 1 20 0v6"/><circle cx="30" cy="38" r="3" fill="#111"/></svg>`,
+  cloth:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round"><path d="M10 20c10-8 30-8 40 0l-4 28c-10 4-22 4-32 0z"/><path d="M18 26c8 3 16 3 24 0M17 36c9 3 17 3 26 0"/></svg>`,
+  window:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><rect x="8" y="6" width="44" height="48" rx="3"/><path d="M30 6v48M8 30h44"/><path d="M40 16c4-2 6 2 10 0" stroke-width="2"/></svg>`,
+  star:`<svg viewBox="0 0 60 60"><path d="M30 6l7 15 16 2-12 11 3 16-14-8-14 8 3-16L7 23l16-2z" fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round"/></svg>`,
+  washer:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><rect x="8" y="4" width="44" height="52" rx="6"/><path d="M8 16h44"/><circle cx="16" cy="10" r="2" fill="#111"/><circle cx="30" cy="36" r="13"/><path d="M21 38c4 3 8-3 12 0s6 0 6 0" stroke-width="2"/></svg>`,
+  shirt:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round"><path d="M22 8l-14 8 5 10 5-3v29h24V23l5 3 5-10-14-8c-2 5-14 5-16 0z"/></svg>`,
+  tap:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round"><path d="M8 26h24a8 8 0 0 1 8 8v4"/><path d="M8 18h26a14 14 0 0 1 14 14v6"/><path d="M20 18v-8M14 10h12" stroke-linecap="round"/><path d="M44 46c0 4-4 6-4 9" stroke-linecap="round"/></svg>`,
+  dial:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><circle cx="30" cy="32" r="16"/><circle cx="30" cy="22" r="2.5" fill="#111"/><path d="M10 16a26 26 0 0 0-2 18M50 16a26 26 0 0 1 2 18" stroke-width="2.5"/><path d="M8 34l-3-5M8 34l4-4M52 34l3-5M52 34l-4-4" stroke-width="2.5"/></svg>`,
+  filter:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><rect x="6" y="8" width="48" height="46" rx="5"/><rect x="34" y="38" width="16" height="12" rx="2"/><circle cx="42" cy="44" r="3"/></svg>`,
+  rotate:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round"><path d="M46 30a16 16 0 1 1-6-12.5"/><path d="M14 16v-8M14 16h8" transform="scale(-1,1) translate(-60,0)"/></svg>`,
+  plug:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6v12M38 6v12"/><path d="M16 18h28v8a14 14 0 0 1-28 0z"/><path d="M30 40v14"/><path d="M8 52l44-44" stroke="#c0392b"/></svg>`,
+  options:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3"><rect x="4" y="16" width="24" height="12" rx="3"/><rect x="32" y="16" width="24" height="12" rx="3"/><rect x="4" y="34" width="24" height="12" rx="3"/><rect x="32" y="34" width="24" height="12" rx="3"/><text x="16" y="25" font-size="6" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="700">°C</text><text x="44" y="25" font-size="6" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="700">giri</text><text x="16" y="43" font-size="6" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="700">ore</text><text x="44" y="43" font-size="6" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="700">+</text></svg>`,
+  drawer:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3" stroke-linejoin="round"><path d="M6 20h48v24H6z"/><path d="M22 20v24M38 20v24"/><text x="14" y="36" font-size="9" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="800">I</text><text x="30" y="36" font-size="9" text-anchor="middle" stroke="none" fill="#111" font-family="Arial" font-weight="800">II</text><circle cx="46" cy="32" r="4" stroke-width="2"/></svg>`,
+  help:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5"><path d="M14 12h32a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H26l-10 8v-8h-2a6 6 0 0 1-6-6V18a6 6 0 0 1 6-6z" stroke-linejoin="round"/><path d="M24 24a6 6 0 1 1 8 5c-2 1-2 2-2 4" stroke-linecap="round"/><circle cx="30" cy="38" r="1.5" fill="#111"/></svg>`,
+  phone:`<svg viewBox="0 0 60 60" fill="none" stroke="#111" stroke-width="3.5" stroke-linejoin="round"><path d="M18 8l8 12-5 5c3 6 8 11 14 14l5-5 12 8-4 8c-20 0-40-20-40-40z"/></svg>`,
+};
+const UI = {
+  tiles: `<span class="mock grid4"><b>Microonde</b><b>Piano</b><b>Forno</b><b>Lavatrice</b></span>`,
+  list: `<span class="mock rows"><b>Scaldare ›</b><b>Scongelare ›</b><b>Griglia ›</b></span>`,
+  next: `<span class="mock"><b class="mbtn">‹ Indietro</b><b class="mbtn pri">Avanti ›</b></span>`,
+  speak: `<span class="mock"><b class="mbtn">🔊 Leggi ad alta voce</b></span>`,
+  size: `<span class="mock dark"><b class="mbtn inv">A</b><b class="mbtn inv">A+</b><b class="mbtn inv">A++</b></span>`,
+  link: `<span class="mock rows"><b class="mbtn lk">→ Tabella</b><b class="mbtn pri">‹ Torna dove eri</b></span>`,
+  home: `<span class="mock dark"><b style="font-size:2.2em">🏠</b></span>`,
+  search: `<span class="mock"><b class="mbtn" style="min-width:5em;text-align:left;color:#777">torta…</b><b class="mbtn pri">Cerca</b></span>`,
+};
+function icon(key, cls){
+  const [type, val] = [key.slice(0, key.indexOf(":")), key.slice(key.indexOf(":") + 1)];
+  let inner = "";
+  if (type === "img" && IMG[val]) inner = `<img src="${IMG[val]}" alt="">`;
+  else if (type === "svg" && SVG[val]) inner = SVG[val];
+  else if (type === "disp" || type === "txt") inner = `<span class="disp${val.length > 1 ? " n" : ""}">${esc(val)}</span>`;
+  else if (type === "ui") inner = UI[val] || "";
+  else if (type === "btn") { inner = `<span class="keycap">${esc(val)}</span>`; cls = (cls || "") + " kc"; }
+  if (type === "ui") cls = (cls || "") + " uiw";
+  return `<span class="ic ${cls||""}" aria-hidden="true">${inner}</span>`;
+}
+function target(A, t){
+  const [k, v] = [t.split(":")[0], t.slice(t.indexOf(":") + 1)];
+  if (k === "g") return v.indexOf("/") > 0 ? v.replace("/", "/guida/") : `${A.id}/guida/${v}`;
+  if (k === "t") return `${A.id}/tabelle/${v}`;
+  if (k === "q") return `${A.id}/domande/${v}`;
+  if (k === "c") return `${A.id}/com/${v}`;
+  if (k === "k") return `${A.id}/pannello`;
+  if (k === "p") return `${A.id}/problemi`;
+  return "";
+}
+function linksHtml(A, l){
+  if (!l || !l.length) return "";
+  return `<div class="links">${l.map(([label, t]) => `<button class="lnk" data-link="${esc(target(A, t))}">${esc(label)}</button>`).join("")}</div>`;
+}
+let backStack = [];
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-link]");
+  if (!b) return;
+  backStack.push(location.hash.replace(/^#/, ""));
+  go(b.dataset.link);
+});
+function returnBar(){
+  if (!backStack.length) return "";
+  return `<div class="returnbar"><button class="btn primary" id="retbtn">‹ Torna dove eri</button></div>`;
+}
+const src = (app, p) => `<span class="src">📖 ${esc(app.manuale.split(" (")[0])}, pag. ${esc(p)}</span>`;
+
+/* ---------- voce ---------- */
+function speakBtn(text){
+  if (!("speechSynthesis" in window)) return "";
+  return `<button class="speak" data-say="${esc(text)}">🔊 Leggi ad alta voce</button>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-say]");
+  if (!b) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(b.dataset.say);
+  u.lang = "it-IT"; u.rate = 0.9;
+  const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith("it"));
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+});
+
+/* ---------- grandezza testo ---------- */
+function setFs(px){
+  document.documentElement.style.setProperty("--fs", px + "px");
+  document.querySelectorAll(".sizer button").forEach(b => b.setAttribute("aria-pressed", b.dataset.fs == px));
+  try { localStorage.setItem("fs", px); } catch(_) {}
+}
+document.querySelectorAll(".sizer button").forEach(b => b.onclick = () => setFs(b.dataset.fs));
+let savedFs = 21; try { savedFs = localStorage.getItem("fs") || 21; } catch(_) {}
+setFs(savedFs);
+
+/* ---------- navigazione ---------- */
+const go = h => { location.hash = h; };
+$("#home-link").onclick = () => go("");
+$("#home-link").onkeydown = e => { if (e.key === "Enter") go(""); };
+window.addEventListener("hashchange", render);
+
+function render(route){
+  if (typeof route !== "string") route = location.hash;
+  $("#zoom").className = "";
+  speechSynthesis && speechSynthesis.cancel && speechSynthesis.cancel();
+  const parts = route.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
+  const [a, view, id, step] = parts;
+  if (!a) home();
+  else if (a === "cerca") searchView(view || "");
+  else if (a === "aiuto") helpView();
+  else if (byId(a)) {
+    if (a === "come" && view !== "guida") home();
+    else if (view === "guida" && id) guideView(byId(a), id, +(step || 0));
+    else appView(byId(a), view || "guide", id);
+  } else home();
+  if (backStack.length) {
+    app.insertAdjacentHTML("afterbegin", returnBar());
+    $("#retbtn").onclick = () => go(backStack.pop());
+  }
+  app.focus({ preventScroll: true });
+  window.scrollTo(0, 0);
+  const tgt = parts[2] && parts[1] !== "guida" && document.getElementById("x-" + parts[2]);
+  if (tgt) {
+    if (tgt.tagName === "DETAILS") tgt.open = true;
+    setTimeout(() => { tgt.scrollIntoView({ block: "start" }); window.scrollBy(0, -80); tgt.classList.add("flash"); }, 30);
+  }
+}
+
+function home(){
+  backStack = [];
+  app.innerHTML = `
+    <button class="welcome" data-go="come/guida/uso/0">${icon("svg:help")}<span>Prima volta? Ecco come si usa questa guida<small>Tocca qui: bastano pochi minuti</small></span></button>
+    <h2>Cosa vuoi usare?</h2>
+    <div class="grid">
+      ${APPS.map(a => `<button class="tile" data-go="${a.id}">${icon(a.icona)}<span>${esc(a.nome)}</span><small>${esc(a.modello)}</small></button>`).join("")}
+    </div>
+    <form class="search" id="sf" role="search">
+      <input id="q" type="search" placeholder="Cerca: es. scongelare, E21, pirolisi…" aria-label="Cerca nella guida">
+      <button class="btn primary" type="submit">Cerca</button>
+    </form>
+    <div class="grid" style="margin-top:16px">
+      <button class="tile" data-go="aiuto" style="min-height:120px">${icon("svg:phone")}<span>Numeri di assistenza</span></button>
+    </div>
+    <footer>Tutte le informazioni vengono dai manuali d'uso degli elettrodomestici. Accanto a ogni risposta c'è la pagina del manuale.<br>Versione del ${esc(VERSIONE)}.</footer>`;
+  bindGo();
+  $("#sf").onsubmit = e => { e.preventDefault(); const q = $("#q").value.trim(); if (q) go("cerca/" + encodeURIComponent(q)); };
+}
+
+function bindGo(){ app.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go)); }
+
+const TABS = [["guide","Cosa vuoi fare?"],["com","Com'è fatto"],["domande","Domande"],["problemi","Problemi"],["tabelle","Tabelle"],["pannello","I tasti"],["sicurezza","Sicurezza"]];
+
+function appView(A, view, focusId){
+  const tabs = TABS.filter(([k]) => k !== "problemi" || A.problemi.length).filter(([k]) => k !== "sicurezza" || A.sicurezza.length);
+  let body = "";
+  if (view === "guide") {
+    const G = [["", "Le cose di tutti i giorni"], ["pulizia", "Pulizia"], ["altro", "Altre funzioni (servono di rado)"]];
+    body = G.map(([k, h]) => {
+      const list = A.guide.filter(g => (g.gruppo || "") === k);
+      return list.length ? `<h3 class="grouph">${h}</h3><div class="list">${list.map(g => `<button class="item" data-go="${A.id}/guida/${g.id}">${icon(g.icona)}<span>${esc(g.titolo)}</span><span class="arrow">›</span></button>`).join("")}</div>` : "";
+    }).join("");
+  }
+  if (view === "domande") body = A.faq.map(f => faqHtml(A, f)).join("");
+  if (view === "problemi") body = `<div class="list">${A.problemi.map(p => `<div class="card prob">${p.codice ? `<span class="code">${icon(p.codice)}</span>` : `<span class="code">${icon("svg:warn")}</span>`}<div><strong>${esc(p.q)}</strong><div><em>Perché:</em> ${esc(p.causa)}</div><div><em>Cosa fare:</em> ${esc(p.rimedio)}</div>${linksHtml(A, p.l)}${src(A, p.p)}</div></div>`).join("")}</div>
+    <div class="note">Se il problema non si risolve, chiama l'assistenza: <a href="#aiuto">numeri utili</a>. Non riparare da soli.</div>`;
+  if (view === "tabelle") body = (A.funzioni ? funzioniHtml(A) : "") + Object.keys(A.tabelle).map(k => tableHtml(A, A.tabelle[k], k)).join("");
+  if (view === "pannello") body = panelHtml(A);
+  if (view === "com") body = (A.figure || []).map(f => figHtml(A, f)).join("");
+  if (view === "sicurezza") body = `<div class="list">${A.sicurezza.map(s => `<div class="card prob"><span class="code">${icon("svg:warn")}</span><div>${esc(s.t)}<br>${src(A, s.p)}</div></div>`).join("")}</div>`;
+  app.innerHTML = `
+    <button class="btn back" data-go="">‹ Torna all'inizio</button>
+    <div style="display:flex;align-items:center;gap:16px">${icon(A.icona,"hdr")}<div><h2 style="margin:0">${esc(A.nome)}</h2><p class="sub" style="margin:0">${esc(A.modello)}</p></div></div>
+    <div class="tabs" role="tablist">${tabs.map(([k,l]) => `<button role="tab" aria-selected="${k===view}" data-go="${A.id}/${k}">${l}</button>`).join("")}</div>
+    ${body}`;
+  bindGo();
+}
+
+function faqHtml(A, f, open){
+  const l = (f.l || []).slice();
+  if (f.tabella && A.tabelle[f.tabella] && !l.some(x => x[1] === "t:" + f.tabella)) l.unshift([A.tabelle[f.tabella].titolo, "t:" + f.tabella]);
+  return `<details class="faq"${f.id ? ` id="x-${esc(f.id)}"` : ""}${open ? " open" : ""}><summary>${esc(f.q)}</summary><div class="ans"><p style="margin-top:0">${txt(f.a)}</p>
+    ${linksHtml(A, l)}<p>${speakBtn(f.q + ". " + f.a)}</p>${src(A, f.p)}</div></details>`;
+}
+function tableHtml(A, t, key){
+  return `<h3${key ? ` id="x-${esc(key)}"` : ""}>${esc(t.titolo)}</h3><div class="tablewrap"><table><thead><tr>${t.testa.map(h => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${t.righe.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>${t.nota ? `<div class="note">${esc(t.nota)}</div>` : ""}${src(A, t.p)}`;
+}
+function funzioniHtml(A){
+  return `<h3 id="x-funzioni">Le funzioni del forno (manopola sinistra)</h3><div class="list">${A.funzioni.map(([i,n,t,d,l]) => `<div class="card prob"><span class="code">${icon(i)}</span><div><strong>${esc(n)}</strong> · ${esc(t)}<br>${esc(d)}${linksHtml(A, l)}</div></div>`).join("")}</div>${src(A, 242)}`;
+}
+function figImg(name){
+  return `<div class="imgbox" data-zoom="${name}"><img src="${IMG[name]}" alt="Disegno dal manuale"><span class="zoomhint">🔍 Tocca per ingrandire</span></div>`;
+}
+function figHtml(A, f){
+  return `<div class="fig" id="x-${esc(f.img)}"><h3>${esc(f.titolo)}</h3>${figImg(f.img)}
+    ${f.legenda ? `<ol>${f.legenda.map(l => `<li>${esc(l)}</li>`).join("")}</ol>` : ""}
+    ${f.testo ? `<p style="margin:12px 0 0;font-weight:600">${esc(f.testo)}</p>` : ""}
+    ${src(A, f.p)}</div>`;
+}
+const findFig = (A, name) => (A.figure || []).find(f => f.img === name) || { img: name, titolo: "", p: "" };
+document.addEventListener("click", e => {
+  const z = e.target.closest("[data-zoom]");
+  if (z) { $("#zoom img").src = IMG[z.dataset.zoom]; $("#zoom").className = "on"; return; }
+  if (e.target.closest("#zoom")) $("#zoom").className = "";
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("#zoom").className = ""; });
+function panelHtml(A){
+  const P = A.pannello;
+  return `<h3>${esc(P.titolo)}</h3>
+    <div class="panelimg"><img src="${IMG[P.img]}" alt="Disegno del pannello dal manuale"></div>
+    ${P.img2 ? `<div class="panelimg" style="margin-top:10px"><img src="${IMG[P.img2]}" alt="Disegno dal manuale" style="max-height:320px"></div>` : ""}
+    ${P.zone ? `<div class="note"><strong>Le zone:</strong><br>${P.zone.map(esc).join("<br>")}</div>` : ""}
+    ${P.note ? `<div class="warn">${esc(P.note)}</div>` : ""}
+    <div class="legend">${P.legenda.map(([i,t]) => `<div>${icon(i)}<span>${esc(t)}</span></div>`).join("")}</div>${src(A, P.p)}`;
+}
+
+function guideView(A, gid, step){
+  const g = A.guide.find(x => x.id === gid);
+  if (!g) return appView(A, "guide");
+  const n = g.passi.length;
+  const all = step === -1;
+  const done = step >= n;
+  let body;
+  if (all) {
+    body = `<div class="list">${g.passi.map((p, k) => `<div class="card prob${p.i.indexOf("ui:") === 0 ? " stack" : ""}"><span class="code">${icon(p.i)}</span><div><strong>${k+1}. ${esc(p.t)}</strong>${p.d ? `<div class="sub" style="margin:4px 0 0">${txt(p.d)}</div>` : ""}${p.f ? `<div class="fig stepfig">${figImg(p.f)}</div>` : ""}${linksHtml(A, p.l)}</div></div>`).join("")}</div>
+      <div class="nav"><button class="btn big" data-go="${A.id}/guida/${g.id}/0">Passo per passo</button></div>`;
+  } else if (done) {
+    body = `<div class="card step"><span class="ic" style="border-color:var(--ok)"><svg viewBox="0 0 60 60" fill="none" stroke="#2f7d55" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 32l12 12 24-26"/></svg></span><p class="t">Fatto!</p></div>
+      <div class="nav"><button class="btn big" data-go="${A.id}/guida/${g.id}/0">↺ Ricomincia</button>${A.id === "come" ? `<button class="btn big primary" data-go="">🏠 Vai alla prima pagina</button>` : `<button class="btn big primary" data-go="${A.id}/guide">Altre guide</button>`}</div>`;
+  } else {
+    const p = g.passi[step];
+    body = `<div class="card step" aria-live="polite">
+        <span class="count">PASSO ${step+1} DI ${n}</span>
+        <div class="dots">${g.passi.map((_, k) => `<span class="${k<=step?"on":""}"></span>`).join("")}</div>
+        ${icon(p.i)}
+        <p class="t">${esc(p.t)}</p>
+        ${p.d ? `<p class="d">${txt(p.d)}</p>` : ""}
+        ${linksHtml(A, p.l)}
+        ${speakBtn(p.t + " " + (p.d || ""))}
+      </div>
+      ${p.f ? `<div class="fig stepfig">${figImg(p.f)}${findFig(A, p.f).legenda ? `<ol>${findFig(A, p.f).legenda.map(l => `<li>${esc(l)}</li>`).join("")}</ol>` : ""}</div>` : ""}
+      <div class="nav">
+        <button class="btn big" ${step===0?"disabled style='opacity:.4'":""} data-go="${A.id}/guida/${g.id}/${step-1}">‹ Indietro</button>
+        <button class="btn big primary" data-go="${A.id}/guida/${g.id}/${step+1}">${step===n-1?"Finito ✓":"Avanti ›"}</button>
+      </div>`;
+  }
+  app.innerHTML = `
+    <button class="btn back" data-go="${A.id === "come" ? "" : A.id + "/guide"}">‹ ${A.id === "come" ? "Prima pagina" : esc(A.nome)}</button>
+    <h2>${esc(g.titolo)}</h2>
+    ${g.avviso && step <= 0 ? `<div class="warn">⚠️ ${esc(g.avviso)}</div>` : ""}
+    ${g.intro && step <= 0 ? `<div class="note">${esc(g.intro)}</div>` : ""}
+    ${g.attenzione && (step <= 0 || done) ? `<div class="warn">⚠️ ${esc(g.attenzione)}</div>${g.fig && step === 0 ? `<div class="fig">${figImg(g.fig)}</div>` : ""}` : ""}
+    ${body}
+    ${g.nota && (done || all || step === n-1) ? `<div class="note">${esc(g.nota)}</div>` : ""}
+    ${g.l && (step <= 0 || done || all) ? `<h3>Collegati</h3>${linksHtml(A, g.l)}` : ""}
+    ${g.tabella && (done || all) ? tableHtml(A, A.tabelle[g.tabella], g.tabella) : ""}
+    ${!all && !done ? `<p><button class="btn" data-go="${A.id}/guida/${g.id}/-1">Vedi tutti i passi insieme</button></p>` : ""}
+    ${g.p ? src(A, g.p) : ""}`;
+  bindGo();
+}
+
+function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+function searchView(q){
+  const words = norm(q).split(/\s+/).filter(Boolean);
+  const hit = s => { const t = norm(s); return words.every(w => t.includes(w)); };
+  const res = [];
+  APPS.forEach(A => {
+    A.guide.forEach(g => { if (hit(g.titolo + " " + (g.intro||"") + " " + g.passi.map(p => p.t + " " + (p.d||"")).join(" "))) res.push({ k: 0, A, html: `<button class="item" data-go="${A.id}/guida/${g.id}">${icon(g.icona)}<span>${esc(g.titolo)}<br><small class="sub">${esc(A.nome)} · guida</small></span><span class="arrow">›</span></button>` }); });
+    A.faq.forEach(f => { if (hit(f.q + " " + f.a)) res.push({ k: 1, A, html: `<div><small class="sub">${esc(A.nome)}</small>${faqHtml(A, f)}</div>` }); });
+    A.problemi.forEach(p => { if (hit(p.q + " " + p.causa + " " + p.rimedio)) res.push({ k: 2, A, html: `<div class="card prob"><span class="code">${icon(p.codice || "svg:warn")}</span><div><small class="sub">${esc(A.nome)}</small><br><strong>${esc(p.q)}</strong><div><em>Perché:</em> ${esc(p.causa)}</div><div><em>Cosa fare:</em> ${esc(p.rimedio)}</div>${src(A, p.p)}</div></div>` }); });
+  });
+  res.sort((x, y) => x.k - y.k);
+  app.innerHTML = `
+    <button class="btn back" data-go="">‹ Torna all'inizio</button>
+    <form class="search" id="sf" role="search"><input id="q" type="search" value="${esc(q)}" aria-label="Cerca"><button class="btn primary">Cerca</button></form>
+    <h2>${res.length ? `Ho trovato ${res.length} ${res.length===1?"risultato":"risultati"}` : "Nessun risultato"}</h2>
+    ${res.length ? `<div class="list">${res.map(r => r.html).join("")}</div>` : `<div class="note">Prova con un'altra parola (es. "pulire", "bip", "torta", "E10"), oppure scegli l'elettrodomestico dalla pagina iniziale.</div>`}`;
+  bindGo();
+  $("#sf").onsubmit = e => { e.preventDefault(); const v = $("#q").value.trim(); if (v) go("cerca/" + encodeURIComponent(v)); };
+}
+
+function helpView(){
+  const fam = FAMIGLIA.tel ? `<div class="card contact"><strong>${esc(FAMIGLIA.nome || "Famiglia")}</strong><a href="tel:${esc(FAMIGLIA.tel.replace(/\s/g,""))}">${esc(FAMIGLIA.tel)}</a></div>` : "";
+  app.innerHTML = `
+    <button class="btn back" data-go="">‹ Torna all'inizio</button>
+    <h2>Numeri di assistenza</h2>
+    <div class="list">${fam}${CONTATTI.map(c => `<div class="card contact"><strong>${esc(c.nome)}</strong><a href="tel:${esc(c.tel.replace(/\s/g,""))}">📞 ${esc(c.tel)}</a><span>${esc(c.note)}</span><span class="src">📖 ${esc(c.fonte)}</span></div>`).join("")}</div>`;
+  bindGo();
+}
+
+render();
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  navigator.serviceWorker.register("sw.js").catch(function(){});
+}
+</script>
+</body>
+</html>
